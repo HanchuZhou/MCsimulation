@@ -6,7 +6,8 @@ To calculate collision rate,
 ```python
 collision_rate, _ = run_monte_carlo_simulation(world, ego_vehicle, background_vehicles, bg_speeds)
 ```
-```python
+
 To debug and visualize the trajectories of vehicles,
+```python
 visualize_trajectories(world, ego_vehicle, background_vehicles, bg_speeds)
 ```
