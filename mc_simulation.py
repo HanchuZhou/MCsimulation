@@ -3,7 +3,6 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Define constants
 NUM_SIMULATIONS = 1000  # Number of Monte Carlo simulations
 EGO_SPEED_RANGE = (5, 50)  # Speed range in m/s for ego vehicle
 TIME_STEP = 0.05  # Simulation time step in seconds
@@ -68,21 +67,33 @@ def simulate_ego_trajectory(ego_start, ego_speed, bg_trajectories, background_ve
     total_time_steps = int(SIM_DURATION / TIME_STEP)
 
     for t in range(total_time_steps):
-        # Update ego vehicle position
         ego_x += ego_speed * TIME_STEP * np.cos(ego_yaw)
         ego_y += ego_speed * TIME_STEP * np.sin(ego_yaw)
         ego_traj.append((ego_x, ego_y))
 
         # Check for collisions with background vehicles
         for vehicle in background_vehicles:
-            bg_x, bg_y = bg_trajectories[vehicle.id][t]  # Precomputed position
+            bg_x, bg_y = bg_trajectories[vehicle.id][t]
             if np.linalg.norm(np.array([ego_x, ego_y]) - np.array([bg_x, bg_y])) < COLLISION_DISTANCE:
                 collision = True
 
     return ego_traj, collision
 
 def run_monte_carlo_simulation(world, ego_vehicle, background_vehicles, bg_speeds):
-    """Run Monte Carlo simulations with precomputed background vehicle trajectories."""
+    """
+    Run Monte Carlo simulations to compute the collision rate of the ego vehicle.
+    
+    Parameters:
+        world (carla.World): The CARLA simulation world.
+        ego_vehicle (carla.Vehicle): The ego vehicle that is being evaluated.
+        background_vehicles (list[carla.Vehicle]): A list of background vehicles.
+        bg_speeds (list[float]): A list of speeds (in m/s) for each background vehicle.
+    
+    Returns:
+        tuple:
+            - collision_rate (float): The percentage of simulations where a collision occurs.
+            - bg_trajectories (dict): A dictionary containing precomputed trajectories for background vehicles.
+    """
     collision_count = 0
     ego_start = ego_vehicle.get_transform()
 
@@ -99,18 +110,25 @@ def run_monte_carlo_simulation(world, ego_vehicle, background_vehicles, bg_speed
     return collision_rate, bg_trajectories
 
 def visualize_trajectories(world, ego_vehicle, background_vehicles, bg_speeds):
-    """Visualize Monte Carlo simulation results and precomputed background vehicle trajectories."""
+    """
+    Visualize Monte Carlo simulation results, including ego vehicle trajectories, background vehicle trajectories, and collision rates.
+    
+    Parameters:
+        world (carla.World): The CARLA simulation world.
+        ego_vehicle (carla.Vehicle): The ego vehicle that is being evaluated.
+        background_vehicles (list[carla.Vehicle]): A list of background vehicles.
+        bg_speeds (list[float]): A list of speeds (in m/s) for each background vehicle.
+    """
     plt.figure(figsize=(12, 8))
 
-    # Run Monte Carlo simulation and get collision rate
     collision_rate, bg_trajectories = run_monte_carlo_simulation(world, ego_vehicle, background_vehicles, bg_speeds)
 
-    # Plot background vehicle trajectories and mark start points
+    # Background vehicle trajectories
     for i, vehicle in enumerate(background_vehicles):
         bg_x, bg_y = zip(*bg_trajectories[vehicle.id])
         plt.plot(bg_x, bg_y, linestyle='--', color='gray', alpha=0.7)
 
-        # Mark start point of each background vehicle
+        # Background vehicle
         plt.scatter(bg_x[0], bg_y[0], color='purple', marker='x', s=120, 
                     label="BG Start" if i == 0 else "")
 
