@@ -186,3 +186,7 @@ def visualize_trajectories(world, ego_vehicle, background_vehicles, bg_speeds):
 # world = client.get_world()
 # ego_vehicle = world.get_actors().filter('vehicle.*')[0]  # Assume first vehicle is ego
 # background_vehicles = [v for v in world.get_actors().filter('vehicle.*') if v.id != ego_vehicle.id]
+
+# bg_speeds = [15, 25, 30]
+# bg_trajectories = precompute_background_trajectories(background_vehicles, bg_speeds, world)
+# visualize_trajectories(world, ego_vehicle, background_vehicles, bg_speeds, bg_trajectories)
