@@ -152,6 +152,9 @@ def visualize_trajectories(world, ego_transform, bg_transforms, bg_speeds):
 
 
 # bg_speeds = [20]
-# transforms = [vehicle.get_transform() for vehicle in l]  # Extract transforms. Assume the first vehicle is the ego
-# rate, _ = run_monte_carlo_simulation(world, transforms[0], transforms[1:], bg_speeds)
-# visualize_trajectories(world, transforms[0], transforms[1:], bg_speeds)
+# ego_transform = carla.Transform(
+#     carla.Location(x, y, z),
+#     carla.Rotation(roll, pitch, yaw)
+# )
+# rate, _ = run_monte_carlo_simulation(world, ego_transfrom, bg_transfroms, bg_speeds)
+# visualize_trajectories(world, ego_transfrom, bg_transfroms, bg_speeds)
