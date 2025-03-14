@@ -4,10 +4,10 @@ Since the script needs to read the vehicle state and map topology from CARLA, it
 
 To calculate collision rate,
 ```python
-collision_rate, _ = run_monte_carlo_simulation(world, ego_vehicle, background_vehicles, bg_speeds)
+collision_rate, _ = run_monte_carlo_simulation(world, ego_transform, background_transforms, bg_speeds)
 ```
 
 To debug and visualize the trajectories of vehicles,
 ```python
-visualize_trajectories(world, ego_vehicle, background_vehicles, bg_speeds)
+visualize_trajectories(world, ego_transform, background_transforms, bg_speeds)
 ```
